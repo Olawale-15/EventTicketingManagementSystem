@@ -1,0 +1,117 @@
+﻿
+@model EventTicketingApp.Models.AttendeeModel.AttendeeResponse
+
+@{
+    ViewData["Title"] = "Delete Attendee";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #495057;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #d9534f;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        background-color: #f8f9fa;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        background-color: #d9534f;
+        color: #ffffff;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+        .card-body p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+            .card-body p strong {
+                color: #d9534f;
+            }
+
+    .btn-danger, .btn-secondary {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        width: 48%;
+    }
+
+    .btn-danger {
+        background-color: #d9534f;
+        border: none;
+        margin-right: 4%;
+    }
+
+        .btn-danger:hover {
+            background-color: #c9302c;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>@Model.FullName</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>UserName:</strong> @Model.UserName</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
+            <p><strong>Address:</strong> @Model.Address</p>
+        </div>
+    </div>
+
+    <form asp-action="DeleteAttendee" method="post">
+        <div class="button-group">
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="AttendeeDashBoard" asp-controller="Authentication" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+

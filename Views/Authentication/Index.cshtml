@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">@ViewBag.Title</h2>
+    <div class="text-center">
+        <a asp-action="RegisterAttendee" class="btn btn-success">Register as Attendee</a>
+        <a asp-action="RegisterEventOrganizer" class="btn btn-info">Register as Event Organizer</a>
+        <a asp-action="Login" class="btn btn-primary">Login</a>
+    </div>
+</div>

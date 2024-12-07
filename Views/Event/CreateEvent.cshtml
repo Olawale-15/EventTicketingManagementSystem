@@ -1,0 +1,169 @@
+﻿ @using EventTicketingApp.Core.Domain.Enums
+@model EventTicketingApp.Models.EventModell.EventRequest
+
+@{
+    ViewBag.Title = "Create Event";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    .container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+
+    h2 {
+        color: #007bff;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+
+    .alert {
+        border-radius: 5px;
+        margin-bottom: 20px;
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .btn-back {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        text-align: center;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+        .btn-back:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ced4da;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+</style>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>@ViewBag.Title</h2>
+        <a href="@Url.Action("EventOrganizerDashboard", "Authentication")" class="btn btn-back">Back to Dashboard</a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @using (Html.BeginForm("CreateEvent", "Event", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Title)
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Title)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Description)
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Description)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.DateAndTime)
+    
+            <!-- Alert message -->
+            <div class="alert alert-warning">
+                Note: The event start date must be at least 7 days from today. Please select a date that is 7 days or more in the future.
+            </div>
+
+            @Html.EditorFor(m => m.DateAndTime, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.DateAndTime)
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Duration)
+            @Html.EditorFor(m => m.Duration, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Duration)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Venue)
+            @Html.TextBoxFor(m => m.Venue, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Venue)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Type)
+            @Html.DropDownListFor(m => m.Type, new SelectList(Enum.GetValues(typeof(EventType))), "Select Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Type)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Category)
+            @Html.DropDownListFor(m => m.Category, new SelectList(Enum.GetValues(typeof(EventCategory))), "Select Category", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Category)
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Event</button>
+    }
+</div>

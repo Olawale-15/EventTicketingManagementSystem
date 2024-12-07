@@ -1,0 +1,128 @@
+﻿
+@model EventTicketingApp.Models.EventModell.EventResponse
+
+@{
+    ViewBag.Title = "Event Details";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f9;
+        color: #333;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: #4a90e2;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .dl-horizontal dt {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .dl-horizontal dd {
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .btn-back {
+        background-color: #17a2b8;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+        .btn-back:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+    .ticket-details ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .ticket-details li {
+        margin-bottom: 10px;
+    }
+
+    .ticket-details strong {
+        color: #333;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>@ViewBag.Title</h2>
+        <a href="@Url.Action("EventOrganizerDashboard", "Authentication")" class="btn btn-back">Back to Dashboard</a>
+        <a href="@Url.Action("GetEventsByEventOrganizerId", "Event")" class="btn btn-back">Back to List</a>
+    </div>
+
+    <h4>@Model.Title</h4>
+    <hr />
+
+    <dl class="dl-horizontal">
+        <dt>Date and Time</dt>
+        <dd>@(Model.DateAndTime.HasValue ? Model.DateAndTime.Value.ToString("f") : "No Date Available")</dd>
+
+        <dt>Description</dt>
+        <dd>@Model.Description</dd>
+
+        <dt>Duration</dt>
+        <dd>@Model.Duration</dd>
+
+        <dt>Venue</dt>
+        <dd>@Model.Venue</dd>
+
+        <dt>Type</dt>
+        <dd>@Model.Type</dd>
+
+        <dt>Category</dt>
+        <dd>@Model.Category</dd>
+
+        <dt>Tickets</dt>
+        <dd>
+            @if (Model.Tickets.Any())
+            {
+                <div class="ticket-details">
+                    @foreach (var ticket in Model.Tickets)
+                    {
+                        <div>
+                            <strong>Ticket Details:</strong>
+                            <ul>
+                                @foreach (var typeCount in ticket.TicketTypeCounts)
+                                {
+                                    <li>Type: @typeCount.Type, Count: @typeCount.Count, Price: @typeCount.Price</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <span>No tickets available</span>
+            }
+        </dd>
+    </dl>
+</div>

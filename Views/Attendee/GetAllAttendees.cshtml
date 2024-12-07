@@ -1,0 +1,170 @@
+﻿
+@model IEnumerable<EventTicketingApp.Models.AttendeeModel.AttendeeResponse>
+
+@{
+    ViewBag.Title = "All Attendees";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h2 {
+        font-weight: 700;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        border-radius: 5px;
+        margin-bottom: 20px;
+        padding: 15px;
+        font-size: 16px;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .btn-back {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        text-align: center;
+        display: inline-block;
+    }
+
+        .btn-back:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background-color: #ffffff;
+    }
+
+    thead {
+        background-color: #007bff;
+        color: #ffffff;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tbody tr:hover {
+        background-color: #e9ecef;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        ul li {
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            padding: 10px;
+        }
+
+    .tickets {
+        padding: 0;
+        margin: 0;
+    }
+
+        .tickets ul {
+            padding-left: 20px;
+        }
+
+        .tickets li {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            padding: 10px;
+        }
+</style>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>All Attendees</h2>
+        <a href="@Url.Action("AdminDashboard", "Authentication")" class="btn btn-back">Back to Dashboard</a>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>User Name</th>
+                <th>Tickets</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var attendee in Model)
+            {
+                <tr>
+                    <td>@attendee.FullName</td>
+                    <td>@attendee.Email</td>
+                    <td>@attendee.PhoneNumber</td>
+                    <td>@attendee.Address</td>
+                    <td>@attendee.UserName</td>
+                    <td class="tickets">
+                        @if (attendee.TicketRecords != null && attendee.TicketRecords.Any())
+                        {
+                            <ul>
+                                @foreach (var ticketRecord in attendee.TicketRecords)
+                                {
+                                    <li>
+                                        <strong>Event Name:</strong> @ticketRecord.EventTitle<br />
+                                        <strong>Ticket Type:</strong> @ticketRecord.Type<br />
+                                        <strong>Count:</strong> @ticketRecord.Count<br />
+                                        <strong>Total Price:</strong> @ticketRecord.TotalPrice<br />
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>No tickets purchased</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

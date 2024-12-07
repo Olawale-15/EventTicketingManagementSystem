@@ -1,0 +1,52 @@
+﻿@model EventTicketingApp.Models.WalletModell.UpdateWalletRequest
+
+@{
+    ViewData["Title"] = "Fund Wallet";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header text-center bg-primary text-white">
+                    <h2>@ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger text-center">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+
+                    <form asp-action="FundWallet" method="post">
+                        <div class="form-group mb-4">
+                            <label asp-for="Balance" class="form-label">Amount to Fund</label>
+                            <input asp-for="Balance" class="form-control form-control-lg" placeholder="Enter amount" />
+                            <span asp-validation-for="Balance" class="text-danger"></span>
+                        </div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-wallet"></i> Fund Wallet
+                            </button>
+                        </div>
+                    </form>
+                    <a href="@Url.Action("AttendeeDashBoard", "Authentication")" class="btn btn-back">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+
+
+

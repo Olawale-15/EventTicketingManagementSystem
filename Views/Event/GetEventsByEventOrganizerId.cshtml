@@ -1,0 +1,201 @@
+﻿@model IEnumerable<EventTicketingApp.Models.EventModell.EventResponse>
+
+@{
+    ViewBag.Title = "My Events";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f9;
+        color: #333;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    h2 {
+        color: #4a90e2;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .btn-back {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+
+        .btn-back:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        background-color: #fff;
+        border-collapse: collapse;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .table thead {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e6f7ff;
+        }
+
+        .table tbody td ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+            .table tbody td ul li {
+                padding: 5px 0;
+            }
+
+                .table tbody td ul li strong {
+                    color: #4a90e2;
+                }
+
+        .table tbody td span {
+            color: #888;
+        }
+
+    .btn {
+        padding: 8px 12px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .btn-danger {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .btn-primary {
+        background-color: #4a90e2;
+        color: white;
+    }
+
+        .btn-primary:hover, .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+    .alert-danger {
+        background-color: #e74c3c;
+        color: white;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .actions span {
+        margin: 0 5px;
+        font-weight: bold;
+        color: #888;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>@ViewBag.Title</h2>
+        <a href="@Url.Action("EventOrganizerDashboard", "Authentication")" class="btn btn-back">Back to Dashboard</a>
+    </div>
+
+    @if (TempData["EventErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["EventErrorMessage"]</div>
+    }
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Date and Time</th>
+                <th>Venue</th>
+                <th>Tickets</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@(item.DateAndTime.HasValue ? item.DateAndTime.Value.ToString("f") : "No Date Available")</td>
+                    <td>@item.Venue</td>
+                    <td>
+                        @if (item.Tickets != null && item.Tickets.Any())
+                        {
+                            <ul>
+                                @foreach (var ticket in item.Tickets)
+                                {
+                                    <li>
+                                        <strong>Type:</strong> @ticket.Type <br />
+                                        <ul>
+                                            @foreach (var typeCount in ticket.TicketTypeCounts)
+                                            {
+                                                <li>
+                                                    <strong>Available Count:</strong> @typeCount.Count,
+                                                    <strong>Price:</strong> @typeCount.Price.ToString("C")
+                                                </li>
+                                            }
+                                        </ul>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>No tickets available</span>
+                        }
+                    </td>
+                    <td class="actions">
+                        @Html.ActionLink("Reschedule", "UpdateEvent", new { id = item.Id }, new { @class = "btn btn-primary" })
+                        @Html.ActionLink("Details", "GetEvent", new { id = item.Id }, new { @class = "btn btn-primary" })
+
+                        <form asp-action="DeleteEvent" method="get" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-danger">Cancel</button>
+                        </form>
+
+                        <span> | </span>
+                        @Html.ActionLink("Add or Update Ticket", "Create", "Ticket", new { eventId = item.Id }, new { @class = "btn btn-primary" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

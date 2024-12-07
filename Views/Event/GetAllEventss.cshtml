@@ -1,0 +1,161 @@
+﻿
+@model IEnumerable<EventTicketingApp.Models.EventModell.EventResponse>
+
+@{
+    ViewBag.Title = "All Events";
+}
+
+<style>
+    body {
+        background-color: #f4f7f9;
+        color: #333;
+    }
+
+    h2 {
+        font-weight: 700;
+        color: #007bff;
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+
+    .form-control {
+        border-radius: 20px;
+        border: 1px solid #ced4da;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        border-radius: 20px;
+        padding: 10px 20px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        border-radius: 20px;
+        padding: 10px 20px;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+    .btn-back {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        text-align: center;
+    }
+
+        .btn-back:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+    .list-group-item {
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        padding: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+        .list-group-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .list-group-item h4 {
+            color: #343a40;
+        }
+
+        .list-group-item p {
+            color: #495057;
+            margin: 5px 0;
+        }
+
+        .list-group-item ul {
+            list-style: none;
+            padding: 0;
+        }
+
+            .list-group-item ul li {
+                background: #e9ecef;
+                padding: 8px;
+                border-radius: 5px;
+                margin-bottom: 5px;
+            }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>All Events</h2>
+                <form asp-action="GetAllEventss" method="get" class="d-flex">
+                    <input type="text" name="searchQuery" placeholder="Search events..." class="form-control me-2" value="@Context.Request.Query["searchQuery"]" />
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+            <hr />
+            <div class="d-flex justify-content-between mb-3">
+                @if (ViewBag.IsAdmin)
+                {
+                    <a href="@Url.Action("AdminDashboard", "Authentication")" class="btn btn-back">Back to Dashboard</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("AttendeeDashboard", "Authentication")" class="btn btn-back">Back to Attendee Dashboard</a>
+                }
+            </div>
+            <ul class="list-group">
+                @foreach (var @_event in Model)
+                {
+                    <li class="list-group-item">
+                        <h4>@_event.Title</h4>
+                        <p><strong>Date:</strong> @_event.DateAndTime?.ToString("f")</p>
+                        <p><strong>Venue:</strong> @_event.Venue</p>
+                        <p><strong>Description:</strong> @_event.Description</p>
+                        <p><strong>Duration:</strong> @_event.Duration</p>
+                        <p><strong>Category:</strong> @_event.Category</p>
+                        <p><strong>DateAndTime:</strong> @_event.DateAndTime</p>
+                        <p><strong>EventType:</strong> @_event.Type</p>
+
+                        @if (ViewBag.IsAdmin)
+                        {
+                            <p><strong>Tickets:</strong></p>
+                            <ul>
+                                @foreach (var ticket in @_event.Tickets)
+                                {
+                                    <li>Type: @ticket.Type, Remaining: @ticket.TicketTypeCounts.Sum(t => t.Count), Price: @ticket.TicketTypeCounts.First().Price</li>
+                                }
+                            </ul>
+                        }
+
+                        @if (!(bool)ViewBag.IsAdmin && @_event.Tickets != null && @_event.Tickets.Any())
+                        {
+                            <a asp-controller="Ticket" asp-action="BuyTicket" asp-route-eventId="@_event.Id" class="btn btn-success">Buy Ticket</a>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

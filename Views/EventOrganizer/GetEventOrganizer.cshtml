@@ -1,0 +1,203 @@
+﻿@model EventTicketingApp.Models.EventOrganizerModel.EventOrganizerResponse
+
+@{
+    ViewBag.Title = "Event Organizer Details";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    h2 {
+        color: #4a90e2;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .btn-back {
+        background-color: #17a2b8;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        margin-bottom: 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+
+        .btn-back:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+    .card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+
+    .card-header {
+        background-color: #4a90e2;
+        color: white;
+        font-size: 18px;
+        padding: 10px 15px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+    .card-title {
+        font-size: 22px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .card-text {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .btn-secondary {
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .btn-secondary:hover {
+            background-color: #357ab8;
+        }
+
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        background-color: #fff;
+        border-collapse: collapse;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .table thead {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e6f7ff;
+        }
+
+    .alert {
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .alert-danger {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .alert-success {
+        background-color: #2ecc71;
+        color: white;
+    }
+
+    .alert-warning {
+        background-color: #f39c12;
+        color: white;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>@ViewBag.Title</h2>
+        <a href="@Url.Action("EventOrganizerDashboard", "Authentication")" class="btn btn-back">Back to Dashboard</a>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    <div class="card">
+        <div class="card-header">
+            Organizer Details
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">@Model.FullName</h5>
+            <p class="card-text"><strong>Email:</strong> @Model.Email</p>
+            <p class="card-text"><strong>Phone Number:</strong> @Model.PhoneNumber</p>
+            <p class="card-text"><strong>Address:</strong> @Model.Address</p>
+            <p class="card-text"><strong>Username:</strong> @Model.UserName</p>
+        </div>
+    </div>
+
+    <h3>Events Created by @Model.FullName</h3>
+
+    @if (Model.Events.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date and Time</th>
+                    <th>Venue</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var eventItem in Model.Events)
+                {
+                    <tr>
+                        <td>@eventItem.Title</td>
+                        <td>@(eventItem.DateAndTime.HasValue ? eventItem.DateAndTime.Value.ToString("f") : "No Date Available")</td>
+                        <td>@eventItem.Venue</td>
+                        <td>@eventItem.Category</td>
+                        <td>@eventItem.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning">No events created by this organizer.</div>
+    }
+</div>
+
+

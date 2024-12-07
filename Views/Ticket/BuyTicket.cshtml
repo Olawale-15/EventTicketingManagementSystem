@@ -1,0 +1,48 @@
+﻿@model EventTicketingApp.Models.TicketModel.TicketPurchaseViewModel
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="card-title">Buy Tickets for @Model.EventName</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="BuyTicket" method="post">
+                        <input type="hidden" name="EventId" value="@Context.Request.Query["eventId"]" />
+
+                        @for (int i = 0; i < Model.TicketTypes.Count; i++)
+                        {
+                            var ticketType = Model.TicketTypes[i];
+                            <div class="mb-4">
+                                <h4>@ticketType.Type</h4>
+                                <p class="text-muted">Price: @ticketType.Price.ToString("C")</p>
+                                <p class="text-muted">Available: @ticketType.AvailableCount</p>
+
+                                <input type="hidden" name="SelectedTickets[@i].Type" value="@ticketType.Type" />
+                                <div class="form-group">
+                                    <label for="ticketCount-@i">Quantity (optional)</label>
+                                    <input type="number" id="ticketCount-@i" name="SelectedTickets[@i].Count" class="form-control" min="0" max="@ticketType.AvailableCount" placeholder="Enter quantity" />
+                                </div>
+                            </div>
+                        }
+
+                        <button type="submit" class="btn btn-success btn-lg w-100">Buy Tickets</button>
+                    </form>
+
+                    @if (ViewData["error"] != null)
+                    {
+                        <div class="alert alert-danger mt-3">
+                            @ViewData["error"]
+                        </div>
+                    }
+                </div>
+                <div class="card-footer text-center">
+                    <a href="@Url.Action("AttendeeDashBoard", "Authentication")" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

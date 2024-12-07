@@ -1,0 +1,86 @@
+﻿
+@model EventTicketingApp.Models.EventModell.EventResponse
+
+@{
+    ViewBag.Title = "Delete Event";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f9;
+        color: #333;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: #e74c3c;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+        .alert-warning strong {
+            color: #856404;
+        }
+
+    .btn-danger {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+</style>
+
+<div class="container mt-5">
+    <h2>@ViewBag.Title</h2>
+
+    <div class="alert alert-warning">
+        <strong>Warning!</strong> Are you sure you want to delete the event "@Model.Title"?
+    </div>
+
+    <form asp-action="DeleteEvent" method="post">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="@Url.Action("GetEventsByEventOrganizerId", "Event")" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

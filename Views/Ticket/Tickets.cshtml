@@ -1,0 +1,149 @@
+﻿@* 
+ @model IEnumerable<EventTicketingApp.Models.AttendeeTicketRecord.AttendeeTicketRecordResponse>
+
+@{
+    ViewData["Title"] = "My Tickets";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">@ViewData["Title"]</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Ticket Type</th>
+                    <th>Count</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var eventGroup in Model.GroupBy(t => t.EventTitle))
+                {
+                    <tr>
+                        <td rowspan="@eventGroup.Count()">@eventGroup.Key</td>
+                        <td>@eventGroup.First().Type</td>
+                        <td>@eventGroup.First().Count</td>
+                        <td>@eventGroup.First().TotalPrice</td>
+                    </tr>
+                    @foreach (var ticket in eventGroup.Skip(1))
+                    {
+                        <tr>
+                            <td>@ticket.Type</td>
+                            <td>@ticket.Count</td>
+                            <td>@ticket.TotalPrice</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <a href="@Url.Action("AttendeeDashBoard", "Authentication")" class="btn btn-secondary">Back To List</a>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No tickets found.
+            <a href="@Url.Action("AttendeeDashBoard", "Authentication")" class="btn btn-secondary">Back To List</a>
+        </div>
+    }
+</div> *@
+
+@model IEnumerable<EventTicketingApp.Models.AttendeeTicketRecord.AttendeeTicketRecordResponse>
+
+@{
+    ViewData["Title"] = "My Tickets";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">@ViewData["Title"]</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Ticket Type</th>
+                    <th>Count</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var eventGroup in Model.GroupBy(t => t.EventTitle))
+                {
+                    bool isFirstRow = true;
+                    foreach (var ticket in eventGroup.GroupBy(t => t.Type))
+                    {
+                        <tr>
+                            @if (isFirstRow)
+                            {
+                                <td rowspan="@eventGroup.Select(t => t.Type).Distinct().Count()">@eventGroup.Key</td>
+                                isFirstRow = false;
+                            }
+                            <td>@ticket.Key</td>
+                            <td>@ticket.First().Count</td>
+                            <td>@ticket.First().TotalPrice</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <a href="@Url.Action("AttendeeDashBoard", "Authentication")" class="btn btn-secondary">Back To List</a>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No tickets found.
+            <a href="@Url.Action("AttendeeDashBoard", "Authentication")" class="btn btn-secondary">Back To List</a>
+        </div>
+    }
+</div>
+
+
+@section Styles {
+    <style>
+        .table {
+            background-color: #f8f9fa;
+            border-radius: 0.25rem;
+            overflow: hidden;
+        }
+
+            .table thead {
+                background-color: #007bff;
+                color: white;
+            }
+
+            .table tbody tr:nth-of-type(odd) {
+                background-color: #f2f2f2;
+            }
+
+            .table tbody tr:nth-of-type(even) {
+                background-color: white;
+            }
+
+            .table th, .table td {
+                text-align: center;
+                padding: 12px;
+            }
+
+        .alert {
+            margin-top: 15px;
+        }
+    </style>
+}

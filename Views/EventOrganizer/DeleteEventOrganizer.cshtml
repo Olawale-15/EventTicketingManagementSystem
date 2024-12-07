@@ -1,0 +1,128 @@
+﻿
+@model EventTicketingApp.Models.EventOrganizerModel.EventOrganizerResponse
+
+@{
+    ViewData["Title"] = "Delete Event Organizer";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f9;
+        color: #333;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    h2 {
+        color: #4a90e2;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .btn-back {
+        background-color: #17a2b8;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+        .btn-back:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+    .card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+
+    .card-header {
+        background-color: #4a90e2;
+        color: white;
+        font-size: 22px;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+
+        .card-body p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+    .btn-danger {
+        background-color: #e74c3c;
+        color: white;
+        border-radius: 5px;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        border-radius: 5px;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+    .form-group {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>@ViewData["Title"]</h2>
+        <a href="@Url.Action("EventOrganizerDashboard", "Authentication")" class="btn btn-back">Back to Dashboard</a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>@Model.FullName</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Username:</strong> @Model.UserName</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
+            <p><strong>Address:</strong> @Model.Address</p>
+        </div>
+    </div>
+
+    <form asp-action="DeleteEventOrganizer" method="post">
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+    </form>
+</div>

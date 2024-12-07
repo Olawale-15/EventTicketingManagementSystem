@@ -1,0 +1,134 @@
+﻿
+@model EventTicketingApp.Models.TicketModel.CreateTicketRequest
+
+@{
+    ViewBag.Title = "Create Ticket";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f9;
+        color: #333;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        color: #4a90e2;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .alert-danger {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .alert-success {
+        background-color: #2ecc71;
+        color: white;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-weight: 600;
+        }
+
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+    }
+
+    .btn-primary {
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+        .btn-primary:hover {
+            background-color: #357ab8;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-left: 10px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+</style>
+
+<div class="container mt-5">
+    <h2>@ViewBag.Title</h2>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    @using (Html.BeginForm("Create", "Ticket", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.EventId)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Price)
+            @Html.TextBoxFor(m => m.Price, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Price)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Type)
+            @Html.DropDownListFor(m => m.Type, (SelectList)ViewBag.TicketTypes, "Select Type", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Type)
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Count)
+            @Html.TextBoxFor(m => m.Count, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Count)
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Ticket</button>
+        <a href="@Url.Action("GetEventsByEventOrganizerId", "Event")" class="btn btn-secondary">Back To List</a>
+    }
+</div>
